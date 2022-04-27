@@ -71,6 +71,8 @@
   font-weight: 600;
   color: black;
   font-size: 2vw;
+
+  cursor: pointer;
 }
 #Token_Show_Room{
   margin-top: 5vh;
@@ -97,6 +99,7 @@
   margin-top: 6vh;
   margin-bottom: 6vh;
   color: aquamarine;
+
 
 }
 #Log_In_Info_Wrapper{
@@ -171,6 +174,80 @@
   justify-content: space-between;
 
   width: 88vw;
-  height: 15vh;
+  height:25vh;
   margin-top: 2vh;
+}
+
+#Game_Mechanics_Wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+}
+#Game_Mechanics_Left{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5vw;
+  margin: 0;
+  color: aquamarine;
+}
+
+#Game_Mechanics_Left_Bottom{
+  display: flex;
+  flex-direction: row;
+  margin-top: 3vh;
+ 
+}
+#Game_Mechanics_Left_Arme_Wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: aquamarine;
+
+  width: 18vw;
+  height: 28vh;
+
+  margin-right: 2vw;
+}
+
+#Game_Mechanics_Right{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5vw;
+  margin: 0;
+  color: aquamarine;
+}
+#Trigger_Wrapper{
+  display: flex;
+  flex-direction: row;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+#Trigger_Button{
+  margin-right: 2vh;
+}
+#Mint_Button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: aquamarine;
+
+  padding-left: 2vw;
+  padding-right: 2vw;
+
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+
+  color: white;
 }

@@ -70,7 +70,17 @@ function App() {
     ["Torso", "0x57a3cbf186fbef36298705fde09f44c8aacd02b1", Torso_img, "1"],
     ["Kopf", "0x7a6b98e5afd2ef6fa51048ba5a7299ffc18cabf0", Kopf_img, "1"],
   ]);
-  const [gesRobotcheck, setgesRobotcheck] = useState(false);
+  const [gesRobotcheck, setgesRobotcheck] = useState("false");
+
+  const [checkGesRoboter, setcheckGesRoboter] = useState("true");
+
+  const [checkBeine, setcheckBeine] = useState("false");
+  const [checkArmLinks, setcheckArmLinks] = useState("false");
+  const [checkArmRechts, setcheckArmRechts] = useState("false");
+  const [checkTorso, setcheckTorso] = useState("false");
+  const [checkKopf, setcheckKopf] = useState("false");
+  const [checkBeideArme, setcheckBeideArme] = useState("false");
+  const [checkOberkörper, setcheckOberkörper] = useState("false");
 
   function userHoldingsf() {
     return userHolding.map((NFT) => {
@@ -219,6 +229,28 @@ function App() {
     setPubAdress();
   }
 
+  function returnLeftArmCheck() {
+    return userHolding.map((NFT) => {
+      if (
+        NFT.contractAddress === ContractAdressArray[2][1] &&
+        NFT.tokenID === ContractAdressArray[2][3]
+      ) {
+        return <Token_Card Title={NFT.tokenName} img={Arm_L_img} />;
+      }
+    });
+  }
+
+  function returnRightArmCheck() {
+    return userHolding.map((NFT) => {
+      if (
+        NFT.contractAddress === ContractAdressArray[3][1] &&
+        NFT.tokenID === ContractAdressArray[3][3]
+      ) {
+        return <Token_Card Title={NFT.tokenName} img={Arm_R_img} />;
+      }
+    });
+  }
+
   function setallUserBalance(publicAdress) {
     const promise = window.ethereum.request({
       method: "eth_getBalance",
@@ -230,6 +262,35 @@ function App() {
       return { ETHBalance };
     });
   }
+
+  function fcheckArmLinks() {
+    return userHolding.map((NFT) => {
+      if (
+        NFT.contractAddress === ContractAdressArray[2][1] &&
+        NFT.tokenID === ContractAdressArray[2][3]
+      ) {
+        setcheckArmLinks("true");
+      }
+    });
+  }
+
+  function fcheckArmRechts() {
+    return userHolding.map((NFT) => {
+      if (
+        NFT.contractAddress === ContractAdressArray[3][1] &&
+        NFT.tokenID === ContractAdressArray[3][3]
+      ) {
+        setcheckArmRechts("true");
+      }
+    });
+  }
+
+  function startMinting() {
+    if (checkArmLinks === "true" && checkArmRechts === "true") {
+      return <div id="Mint_Button">Mint</div>;
+    }
+  }
+
   return (
     <div className="App">
       <div id="Prototyp_Wrapper">
@@ -293,6 +354,35 @@ function App() {
           </div>
 
           <div id="User_Token_Card_Room">{userHoldingsf()}</div>
+          <h1 id="Green_Heading">Game Machanics</h1>
+          <div id="Game_Mechanics_Wrapper">
+            <div id="Game_Mechanics_Left">
+              Bereits gesammelt:
+              <div id="Game_Mechanics_Left_Bottom">
+                <div id="Game_Mechanics_Left_Arme_Wrapper">
+                  {returnLeftArmCheck()}
+                </div>
+
+                <div id="Game_Mechanics_Left_Arme_Wrapper">
+                  {returnRightArmCheck()}
+                </div>
+              </div>
+            </div>
+
+            <div id="Game_Mechanics_Right">
+              Stufe 1: Beide Arme vorhanden?
+              <div id="Trigger_Wrapper">
+                <div id="Trigger_Button" onClick={() => fcheckArmLinks()}>
+                  Trigger
+                </div>
+                <div id="Trigger_Button" onClick={() => fcheckArmRechts()}>
+                  Trigger
+                </div>
+              </div>
+              {startMinting()}
+              <div id="checkBoxBeideArme"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
