@@ -1,38 +1,176 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+#Prototyp_Wrapper{
+  background-color: black;
+  padding-left: 6vw;
+  padding-right: 6vw;
+  width: 88vw;
+  min-height: 250vh;
+  padding-bottom: 5vh;
+
+  padding-top: 5vh;
+  display: flex;
+  flex-direction: column;
+}
+#Header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 6vw;
+  padding-right: 6vw;
+
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+
+  height: 15vh;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+#Header_h2{
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    color: black;
+    font-size: 2vw;
+    margin: 0;
+}
+#Header_LogIn_Bereich{
+  display: flex;
+  flex-direction: column;
+}
+#MetaMaskLogIn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding-left: 1vw;
+  padding-right: 1vw;
+
+  border-radius: 12px;
+
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+
+  background-color: aquamarine;
+  cursor: pointer;
+}
+#CheckUserBalance{
+  padding-left: 1vw;
+  padding-right: 1vw;
+
+  border-radius: 12px;
+
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+
+  background-color: aquamarine;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  color: black;
+  font-size: 2vw;
+}
+#Token_Show_Room{
+  margin-top: 5vh;
+}
+#Token_Row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 88vw;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#Flint{
+  width: 10vw;
 }
+#MetaMask{width: 3vw;}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#Green_Heading{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2vw;
+  margin: 0;
+  margin-top: 6vh;
+  margin-bottom: 6vh;
+  color: aquamarine;
+
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#Log_In_Info_Wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 88vw;
+}
+#Log_In_Info_User{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding-left: 2vw;
+  padding-right: 2vw;
+
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  width: 30vw;
+  height: 15vh;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+#Log_In_Info_Netzwerk{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2vw;
+  padding-right: 2vw;
+
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  width: 30vw;
+  height: 15vh;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+#Info_Row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  color: black;
+  font-size: 0.85vw;
+
+  width: 100%;
+  margin: 0; 
+  margin-bottom: 2vh;
+
 }
 
-.App-link {
-  color: #61dafb;
+#Row_1{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  color: black;
+  font-size: 0.85vw;
+  margin: 0; 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#User_Show_Room{
+  
+}
+#User_Token_Card_Room{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 88vw;
+  height: 15vh;
+  margin-top: 2vh;
 }

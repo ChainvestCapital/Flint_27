@@ -1,0 +1,42 @@
+#Token_Card_Wrapper{
+    padding-left: 2vw;
+    padding-right: 2vw;
+  
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+  
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 8vw;
+}
+#Token_Card_IMG{
+    width: 8vw;
+    border-radius: 8px;
+}
+#Token_Card_h2{
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    color: black;
+    font-size: 1.5vw;
+    margin: 0;
+    text-align: center;
+    margin-top: 2vh;
+}
+
+#Token_Card_h4{
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    font-size: 1vw;
+    margin: 0;
+    text-align: center;
+    margin-top: 1vh;
+}
