@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import Token_Card from "./components/Token_Card";
+import TokenItem from "./components/TokenItem";
 import TokenData from "./TokenData";
 
 /*Images*/
@@ -15,9 +15,6 @@ import Arm_L_img from "./assets/Roboter/Einzelteil_LinkerArm.png";
 import Arm_R_img from "./assets/Roboter/Einzelteil_RechterArm.png";
 import Torso_img from "./assets/Roboter/Einzelteil_Torso.png";
 import Kopf_img from "./assets/Roboter/Einzelteil_Kopf.png";
-
-import response from "./Token_Owner";
-import Token_Owner from "./Token_Owner";
 
 function App() {
   /* Ethereum Data */
@@ -50,18 +47,18 @@ function App() {
     let adress = publicAdressString;
 
     let buys = txs.filter((tx) => {
-      return tx.to == adress;
+      return tx.to === adress;
     });
     console.log("Alle Käufe:" + buys.length + buys);
 
-    let sells = txs.filter((tx) => tx.from == adress);
+    let sells = txs.filter((tx) => tx.from === adress);
     console.log("Alle Verkäufe:" + sells.length + sells);
 
     const ownedUser = buys.filter((buy) => {
       return !sells.some((sell) => {
         return (
-          buy.tokenID == sell.tokenID &&
-          buy.contractAddress == sell.contractAddress
+          buy.tokenID === sell.tokenID &&
+          buy.contractAddress === sell.contractAddress
         );
       });
     });
@@ -104,7 +101,7 @@ function App() {
         NFT.tokenID === ContractAdressArray[0][3]
       ) {
         return (
-          <Token_Card
+          <TokenItem
             Title={NFT.tokenName}
             Anzahl={"1"}
             img={gesamterRoboter_img}
@@ -117,9 +114,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[1][1] &&
         NFT.tokenID === ContractAdressArray[1][3]
       ) {
-        return (
-          <Token_Card Title={NFT.tokenName} Anzahl={"1"} img={Beine_img} />
-        );
+        return <TokenItem Title={NFT.tokenName} Anzahl={"1"} img={Beine_img} />;
       }
 
       //check if Linker Arm in Besitz
@@ -127,9 +122,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[2][1] &&
         NFT.tokenID === ContractAdressArray[2][3]
       ) {
-        return (
-          <Token_Card Title={NFT.tokenName} Anzahl={"1"} img={Arm_L_img} />
-        );
+        return <TokenItem Title={NFT.tokenName} Anzahl={"1"} img={Arm_L_img} />;
       }
 
       //check if Rechter Arm in Besitz
@@ -137,18 +130,14 @@ function App() {
         NFT.contractAddress === ContractAdressArray[3][1] &&
         NFT.tokenID === ContractAdressArray[3][3]
       ) {
-        return (
-          <Token_Card Title={NFT.tokenName} Anzahl={"1"} img={Arm_R_img} />
-        );
+        return <TokenItem Title={NFT.tokenName} Anzahl={"1"} img={Arm_R_img} />;
       }
       //check if Torso in Besitz
       if (
         NFT.contractAddress === ContractAdressArray[4][1] &&
         NFT.tokenID === ContractAdressArray[4][3]
       ) {
-        return (
-          <Token_Card Title={NFT.tokenName} Anzahl={"1"} img={Torso_img} />
-        );
+        return <TokenItem Title={NFT.tokenName} Anzahl={"1"} img={Torso_img} />;
       }
 
       //check if Kopf in Besitz
@@ -156,7 +145,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[5][1] &&
         NFT.tokenID === ContractAdressArray[5][3]
       ) {
-        return <Token_Card Title={NFT.tokenName} Anzahl={"1"} img={Kopf_img} />;
+        return <TokenItem Title={NFT.tokenName} Anzahl={"1"} img={Kopf_img} />;
       }
     });
   }
@@ -204,7 +193,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[2][1] &&
         NFT.tokenID === ContractAdressArray[2][3]
       ) {
-        return <Token_Card Title={NFT.tokenName} img={Arm_L_img} />;
+        return <TokenItem Title={NFT.tokenName} img={Arm_L_img} />;
       }
     });
   }
@@ -215,7 +204,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[3][1] &&
         NFT.tokenID === ContractAdressArray[3][3]
       ) {
-        return <Token_Card Title={NFT.tokenName} img={Arm_R_img} />;
+        return <TokenItem Title={NFT.tokenName} img={Arm_R_img} />;
       }
     });
   }
@@ -225,7 +214,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[2][1] &&
         NFT.tokenID === ContractAdressArray[2][3]
       ) {
-        setcheckArmLinks("true");
+        return setcheckArmLinks("true");
       }
     });
   }
@@ -236,7 +225,7 @@ function App() {
         NFT.contractAddress === ContractAdressArray[3][1] &&
         NFT.tokenID === ContractAdressArray[3][3]
       ) {
-        setcheckArmRechts("true");
+        return setcheckArmRechts("true");
       }
     });
   }
@@ -246,125 +235,100 @@ function App() {
       return <div id="Mint_Button">Mint</div>;
     }
   }
-  function getEthereumData() {
-    /* Connect Account */
-    function connectToMM() {
-      const promise = window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      promise.then(function (result) {});
-    }
-    /*   GET currentChain  */
-    function setcurrentchain() {
-      const promise = window.ethereum.request({ method: "eth_chainId" });
-      promise.then(function (result) {
-        setcurrentNetwork(result);
-      });
-    }
-    /*   GET Ropsten?  */
-
-    /*   GET gasPrice  */
-    function showGasPrice() {
-      const promise = window.ethereum.request({ method: "eth_gasPrice" });
-      promise.then(function (result) {
-        setcurrentgasPrice(parseInt(result, 16));
-      });
-    }
-    setcurrentchain();
-    showGasPrice();
-  }
 
   return (
-    <div className="App">
-      <div id="Prototyp_Wrapper">
-        <div id="Header">
-          <img src={Flint} id="Flint" />
-          <h2 id="Header_h2">Welcome to Flint Prototyp</h2>
+    <div id="Prototyp_Wrapper">
+      <div id="Header">
+        <img src={Flint} id="Flint" alt="" />
+        <h2 id="Header_h2">Welcome to Flint Prototyp</h2>
 
-          <div id="Header_LogIn_Bereich">
-            <div id="MetaMaskLogIn">
-              <img src={MetaMask} id="MetaMask" onClick={() => getUserData()} />
-            </div>
+        <div id="Header_LogIn_Bereich">
+          <div id="MetaMaskLogIn">
+            <img
+              src={MetaMask}
+              alt=""
+              id="MetaMask"
+              onClick={() => getUserData()}
+            />
           </div>
         </div>
-        <h1 id="Green_Heading">Verfügbare Token </h1>
-        <div id="Token_Show_Room">
-          <div id="Token_Row">
-            {TokenData.map((TokenCard) => (
-              <Token_Card
-                img={TokenCard[2]}
-                Title={TokenCard[0]}
-                Anzahl={TokenCard[3]}
-              />
-            ))}
+      </div>
+      <h1 id="Green_Heading">Verfügbare Token </h1>
+      <div id="Token_Show_Room">
+        <div id="Token_Row">
+          {TokenData.map((TokenCard) => (
+            <TokenItem
+              img={TokenCard[2]}
+              Title={TokenCard[0]}
+              Anzahl={TokenCard[3]}
+            />
+          ))}
+        </div>
+      </div>
+      <h1 id="Green_Heading">Infos aus LogIn </h1>
+      <div id="Log_In_Info_Wrapper">
+        <div id="Log_In_Info_User">
+          <div id="Info_Row">
+            <div id="Row_1">MetaMask:</div> {MMStatus}
+          </div>
+          <div id="Info_Row">
+            <div id="Row_1">Current Adress: </div> {publicAdress}
+          </div>
+          <div id="Info_Row">
+            <div id="Row_1">Current Balance:</div> {currentBalance}
           </div>
         </div>
-        <h1 id="Green_Heading">Infos aus LogIn </h1>
-        <div id="Log_In_Info_Wrapper">
-          <div id="Log_In_Info_User">
-            <div id="Info_Row">
-              <div id="Row_1">MetaMask:</div> {MMStatus}
-            </div>
-            <div id="Info_Row">
-              <div id="Row_1">Current Adress: </div> {publicAdress}
-            </div>
-            <div id="Info_Row">
-              <div id="Row_1">Current Balance:</div> {currentBalance}
-            </div>
+        <div id="Log_In_Info_Netzwerk">
+          <div id="Info_Row">
+            <div id="Row_1">Current Netzwerk: </div> {currentNetwork}
           </div>
-          <div id="Log_In_Info_Netzwerk">
-            <div id="Info_Row">
-              <div id="Row_1">Current Netzwerk: </div> {currentNetwork}
-            </div>
-            <div id="Info_Row">
-              <div id="Row_1">Current GasPrice:</div> {currentgasPrice}
-            </div>
-            <div id="Info_Row">
-              <div id="Row_1">Current Block:</div> {currentBlock}
-            </div>
+          <div id="Info_Row">
+            <div id="Row_1">Current GasPrice:</div> {currentgasPrice}
+          </div>
+          <div id="Info_Row">
+            <div id="Row_1">Current Block:</div> {currentBlock}
           </div>
         </div>
+      </div>
+      <h1 id="Green_Heading">User Holdings </h1>
+      <div id="User_Show_Room">
+        <div
+          id="CheckUserBalance"
+          onClick={() => {
+            responseF();
+          }}
+        >
+          Check
+        </div>
 
-        <h1 id="Green_Heading">User Holdings </h1>
-        <div id="User_Show_Room">
-          <div
-            id="CheckUserBalance"
-            onClick={() => {
-              responseF();
-            }}
-          >
-            Check
-          </div>
+        <div id="User_Token_Card_Room">{userHoldingsf()}</div>
+        <h1 id="Green_Heading">Game Machanics</h1>
+        <div id="Game_Mechanics_Wrapper">
+          <div id="Game_Mechanics_Left">
+            Bereits gesammelt:
+            <div id="Game_Mechanics_Left_Bottom">
+              <div id="Game_Mechanics_Left_Arme_Wrapper">
+                {returnLeftArmCheck()}
+              </div>
 
-          <div id="User_Token_Card_Room">{userHoldingsf()}</div>
-          <h1 id="Green_Heading">Game Machanics</h1>
-          <div id="Game_Mechanics_Wrapper">
-            <div id="Game_Mechanics_Left">
-              Bereits gesammelt:
-              <div id="Game_Mechanics_Left_Bottom">
-                <div id="Game_Mechanics_Left_Arme_Wrapper">
-                  {returnLeftArmCheck()}
-                </div>
-
-                <div id="Game_Mechanics_Left_Arme_Wrapper">
-                  {returnRightArmCheck()}
-                </div>
+              <div id="Game_Mechanics_Left_Arme_Wrapper">
+                {returnRightArmCheck()}
               </div>
             </div>
+          </div>
 
-            <div id="Game_Mechanics_Right">
-              Stufe 1: Beide Arme vorhanden?
-              <div id="Trigger_Wrapper">
-                <div id="Trigger_Button" onClick={() => fcheckArmLinks()}>
-                  Trigger
-                </div>
-                <div id="Trigger_Button" onClick={() => fcheckArmRechts()}>
-                  Trigger
-                </div>
+          <div id="Game_Mechanics_Right">
+            Stufe 1: Beide Arme vorhanden?
+            <div id="Trigger_Wrapper">
+              <div id="Trigger_Button" onClick={() => fcheckArmLinks()}>
+                Trigger
               </div>
-              {startMinting()}
-              <div id="checkBoxBeideArme"></div>
+              <div id="Trigger_Button" onClick={() => fcheckArmRechts()}>
+                Trigger
+              </div>
             </div>
+            {startMinting()}
+            <div id="checkBoxBeideArme"></div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import "./Token_Card.css";
 
-function Token_Card(props) {
+function TokenItem(props) {
   return (
     <div className="App">
       <div id="Token_Card_Wrapper">
@@ -13,4 +13,4 @@ function Token_Card(props) {
   );
 }
 
-export default Token_Card;
+export default TokenItem;
