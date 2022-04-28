@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import TokenItem from "./components/TokenItem";
-import TokenData from "./TokenData";
+import ContractAdressArray from "./TokenData";
 
 /*Images*/
 import MetaMask from "./assets/MetaMask.png";
@@ -27,71 +27,52 @@ function App() {
   const [MMStatus, setMMStatus] = useState("Please install MetaMask");
   const [publicAdress, setpublicAdress] = useState("Please Connect");
   const [currentBalance, setcurrentBalance] = useState("Please Connect");
+  const [userHolding, setuserHolding] = useState([]);
 
   useEffect(() => {
     document.title = "Prototyp: 1.0";
   }, []);
 
-  const [userHolding, setuserHolding] = useState([]);
-  const axios = require("axios");
-  const responseF = async () => {
-    const publicAdressString = publicAdress.toString();
-    const response = await axios.get(
-      "https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&address=" +
-        publicAdressString +
-        "&page=1&offset=100&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken"
-    );
+  /* Get Static User Data  */
 
-    const txs = response.data.result;
-    console.log("Über API erhalten" + txs.length);
-    let adress = publicAdressString;
+  function getUserData() {
+    /*   Is MetaMask installed ?  */
+    function testMMinstall() {
+      if (typeof window.ethereum !== "undefined") {
+        setMMStatus("MetaMask ist installiert");
+      }
+    }
+    function getUserMMacsess() {
+      window.ethereum.request({ method: "eth_requestAccounts" });
+    }
 
-    let buys = txs.filter((tx) => {
-      return tx.to === adress;
-    });
-    console.log("Alle Käufe:" + buys.length + buys);
-
-    let sells = txs.filter((tx) => tx.from === adress);
-    console.log("Alle Verkäufe:" + sells.length + sells);
-
-    const ownedUser = buys.filter((buy) => {
-      return !sells.some((sell) => {
-        return (
-          buy.tokenID === sell.tokenID &&
-          buy.contractAddress === sell.contractAddress
-        );
+    /*   Get public Adress   */
+    function setPubAdress() {
+      const promise = window.ethereum.request({ method: "eth_accounts" });
+      promise.then(function (result) {
+        setpublicAdress(result);
+        showBalance(result);
       });
-    });
-    console.log("Im Besitz:" + ownedUser.length + ownedUser);
-    setuserHolding(ownedUser);
-    console.log(ownedUser);
-  };
+    }
 
-  const [ContractAdressArray, setContractAdressArray] = useState([
-    [
-      "Gesamter Roboter",
-      "0x759a89882c4194fff77dc52d6124081387ad69a9",
-      gesamterRoboter_img,
-      "1",
-    ],
-    ["Beine", "0x573eea7bd5fb95296e22513341cb3be1eaeece0b", Beine_img, "1"],
-    ["Arm_L", "0xd35c0efca55dcb1b9f858d3ac259c5960210502b", Arm_L_img, "1"],
-    ["Arm_R", "0x471886887f7269b831cd23fe2966b8cddc7ed8fc", Arm_R_img, "1"],
-    ["Torso", "0x57a3cbf186fbef36298705fde09f44c8aacd02b1", Torso_img, "1"],
-    ["Kopf", "0x7a6b98e5afd2ef6fa51048ba5a7299ffc18cabf0", Kopf_img, "1"],
-  ]);
+    /*   Get Balances   */
+    function showBalance(publicAdress) {
+      const promise = window.ethereum.request({
+        method: "eth_getBalance",
+        params: [publicAdress.toString(), "latest"],
+      });
+      promise.then(function (result) {
+        const IntBalance = parseInt(result, 16);
+        const ETHBalance = IntBalance * 1e-18;
 
-  const [gesRobotcheck, setgesRobotcheck] = useState("false");
-
-  const [checkGesRoboter, setcheckGesRoboter] = useState("true");
-
-  const [checkBeine, setcheckBeine] = useState("false");
-  const [checkArmLinks, setcheckArmLinks] = useState("false");
-  const [checkArmRechts, setcheckArmRechts] = useState("false");
-  const [checkTorso, setcheckTorso] = useState("false");
-  const [checkKopf, setcheckKopf] = useState("false");
-  const [checkBeideArme, setcheckBeideArme] = useState("false");
-  const [checkOberkörper, setcheckOberkörper] = useState("false");
+        setcurrentBalance(ETHBalance);
+      });
+    }
+    getUserMMacsess();
+    testMMinstall();
+    setPubAdress();
+  }
+  /* Display Flint NFT in Show Room  */
 
   function userHoldingsf() {
     return userHolding.map((NFT) => {
@@ -149,42 +130,69 @@ function App() {
       }
     });
   }
-  function getUserData() {
-    /*   Is MetaMask installed ?  */
-    function testMMinstall() {
-      if (typeof window.ethereum !== "undefined") {
-        setMMStatus("MetaMask ist installiert");
+
+  /* Alle Transaktionen über Etherscan API von privaterAdressse holen */
+
+  const axios = require("axios");
+  const responseF = async () => {
+    const publicAdressString = publicAdress.toString();
+    const response = await axios.get(
+      "https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&address=" +
+        publicAdressString +
+        "&page=1&offset=100&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken"
+    );
+
+    const txs = response.data.result;
+    console.log("Über API erhalten" + txs.length);
+    let adress = publicAdressString;
+
+    let buys = txs.filter((tx) => {
+      return tx.to === adress;
+    });
+    console.log("Alle Käufe:" + buys.length + buys);
+
+    let sells = txs.filter((tx) => tx.from === adress);
+    console.log("Alle Verkäufe:" + sells.length + sells);
+
+    const ownedUser = buys.filter((buy) => {
+      return !sells.some((sell) => {
+        return (
+          buy.tokenID === sell.tokenID &&
+          buy.contractAddress === sell.contractAddress
+        );
+      });
+    });
+    console.log("Im Besitz:" + ownedUser.length + ownedUser);
+    setuserHolding(ownedUser);
+    console.log(ownedUser);
+  };
+
+  /* Game Mechanics */
+  /* Arme vorhanden checken */
+
+  const [checkArmLinks, setcheckArmLinks] = useState("false");
+  const [checkArmRechts, setcheckArmRechts] = useState("false");
+
+  function fcheckArmLinks() {
+    return userHolding.map((NFT) => {
+      if (
+        NFT.contractAddress === ContractAdressArray[2][1] &&
+        NFT.tokenID === ContractAdressArray[2][3]
+      ) {
+        return setcheckArmLinks("true"), fcheckArmRechts();
       }
-    }
-    function getUserMMacsess() {
-      window.ethereum.request({ method: "eth_requestAccounts" });
-    }
+    });
+  }
 
-    /*   Get public Adress   */
-    function setPubAdress() {
-      const promise = window.ethereum.request({ method: "eth_accounts" });
-      promise.then(function (result) {
-        setpublicAdress(result);
-        showBalance(result);
-      });
-    }
-
-    /*   Get Balances   */
-    function showBalance(publicAdress) {
-      const promise = window.ethereum.request({
-        method: "eth_getBalance",
-        params: [publicAdress.toString(), "latest"],
-      });
-      promise.then(function (result) {
-        const IntBalance = parseInt(result, 16);
-        const ETHBalance = IntBalance * 1e-18;
-
-        setcurrentBalance(ETHBalance);
-      });
-    }
-    getUserMMacsess();
-    testMMinstall();
-    setPubAdress();
+  function fcheckArmRechts() {
+    return userHolding.map((NFT) => {
+      if (
+        NFT.contractAddress === ContractAdressArray[3][1] &&
+        NFT.tokenID === ContractAdressArray[3][3]
+      ) {
+        return setcheckArmRechts("true");
+      } else console.log("RightMissings");
+    });
   }
 
   function returnLeftArmCheck() {
@@ -208,34 +216,26 @@ function App() {
       }
     });
   }
-  function fcheckArmLinks() {
-    return userHolding.map((NFT) => {
-      if (
-        NFT.contractAddress === ContractAdressArray[2][1] &&
-        NFT.tokenID === ContractAdressArray[2][3]
-      ) {
-        return setcheckArmLinks("true");
-      }
-    });
-  }
-
-  function fcheckArmRechts() {
-    return userHolding.map((NFT) => {
-      if (
-        NFT.contractAddress === ContractAdressArray[3][1] &&
-        NFT.tokenID === ContractAdressArray[3][3]
-      ) {
-        return setcheckArmRechts("true");
-      }
-    });
-  }
-
+  /* Permission to mint? */
   function startMinting() {
     if (checkArmLinks === "true" && checkArmRechts === "true") {
-      return <div id="Mint_Button">Mint</div>;
+      return (
+        <div id="Mint_Button" onClick={() => mintBeideArme()}>
+          Mint
+        </div>
+      );
+    } else {
+      return <div>No Mint permisson</div>;
     }
   }
+  const [MintMessage, setMintMessage] = useState("MintMessage_not_shown");
 
+  /* Mint Beginn von beiden Armen */
+  function mintBeideArme() {
+    setMintMessage("MintMessage_shown");
+  }
+
+  /* FE */
   return (
     <div id="Prototyp_Wrapper">
       <div id="Header">
@@ -256,7 +256,7 @@ function App() {
       <h1 id="Green_Heading">Verfügbare Token </h1>
       <div id="Token_Show_Room">
         <div id="Token_Row">
-          {TokenData.map((TokenCard) => (
+          {ContractAdressArray.map((TokenCard) => (
             <TokenItem
               img={TokenCard[2]}
               Title={TokenCard[0]}
@@ -304,31 +304,30 @@ function App() {
         <div id="User_Token_Card_Room">{userHoldingsf()}</div>
         <h1 id="Green_Heading">Game Machanics</h1>
         <div id="Game_Mechanics_Wrapper">
-          <div id="Game_Mechanics_Left">
-            Bereits gesammelt:
-            <div id="Game_Mechanics_Left_Bottom">
-              <div id="Game_Mechanics_Left_Arme_Wrapper">
-                {returnLeftArmCheck()}
-              </div>
+          <div id="Game_Mechanics_Stage_1">
+            <div id="Game_Mechanics_Left">
+              Bereits gesammelt:
+              <div id="Game_Mechanics_Left_Bottom">
+                <div id="Game_Mechanics_Left_Card_Wrapper">
+                  {returnLeftArmCheck()}
+                </div>
 
-              <div id="Game_Mechanics_Left_Arme_Wrapper">
-                {returnRightArmCheck()}
+                <div id="Game_Mechanics_Left_Card_Wrapper">
+                  {returnRightArmCheck()}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div id="Game_Mechanics_Right">
-            Stufe 1: Beide Arme vorhanden?
-            <div id="Trigger_Wrapper">
-              <div id="Trigger_Button" onClick={() => fcheckArmLinks()}>
-                Trigger
+            <div id="Game_Mechanics_Right">
+              Stufe 1: Beide Arme vorhanden?
+              <div id="Trigger_Wrapper">
+                <div id="Trigger_Button" onClick={() => fcheckArmLinks()}>
+                  Check Minting permisson
+                </div>
               </div>
-              <div id="Trigger_Button" onClick={() => fcheckArmRechts()}>
-                Trigger
-              </div>
+              {startMinting()}
+              <div id={MintMessage}>Mint Prozess von beideArme starten</div>
             </div>
-            {startMinting()}
-            <div id="checkBoxBeideArme"></div>
           </div>
         </div>
       </div>

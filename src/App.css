@@ -183,10 +183,17 @@
 
 #Game_Mechanics_Wrapper{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 
+}
+#Game_Mechanics_Stage_1{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 #Game_Mechanics_Left{
   font-family: 'Montserrat';
@@ -203,7 +210,7 @@
   margin-top: 3vh;
  
 }
-#Game_Mechanics_Left_Arme_Wrapper{
+#Game_Mechanics_Left_Card_Wrapper{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,8 +220,8 @@
   border-style: solid;
   border-color: aquamarine;
 
-  width: 18vw;
-  height: 28vh;
+  width: 16vw;
+  height: 35vh;
 
   margin-right: 2vw;
 }
@@ -234,7 +241,21 @@
   margin-bottom: 2vh;
 }
 #Trigger_Button{
-  margin-right: 2vh;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1vw;
+  margin: 0;
+  color: black;
+
+  background-color: aquamarine;
+
+  padding-left: 2vw;
+  padding-right: 2vw;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  border-radius: 12px;
+
 }
 #Mint_Button{
   display: flex;
@@ -253,4 +274,17 @@
   padding-bottom: 2vh;
 
   color: white;
+}
+#MintMessage_shown{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1vw;
+  margin: 0;
+  color: aquamarine;
+
+  margin-top: 2VH;
+}
+#MintMessage_not_shown{
+  display: none;
 }
