@@ -20,10 +20,23 @@ import response from "./Token_Owner";
 import Token_Owner from "./Token_Owner";
 
 function App() {
-  /*Token Holdings */
+  /* Ethereum Data */
+
+  const [currentNetwork, setcurrentNetwork] = useState("Please Connect");
+  const [currentgasPrice, setcurrentgasPrice] = useState("Please Connect");
+  const [currentBlock, setcurrentBlock] = useState("Please Connect");
+
+  /* User Data */
+  const [MMStatus, setMMStatus] = useState("Please install MetaMask");
+  const [publicAdress, setpublicAdress] = useState("Please Connect");
+  const [currentBalance, setcurrentBalance] = useState("Please Connect");
+
+  useEffect(() => {
+    document.title = "Prototyp: 1.0";
+  }, []);
+
   const [userHolding, setuserHolding] = useState([]);
   const axios = require("axios");
-
   const responseF = async () => {
     const publicAdressString = publicAdress.toString();
     const response = await axios.get(
@@ -70,6 +83,7 @@ function App() {
     ["Torso", "0x57a3cbf186fbef36298705fde09f44c8aacd02b1", Torso_img, "1"],
     ["Kopf", "0x7a6b98e5afd2ef6fa51048ba5a7299ffc18cabf0", Kopf_img, "1"],
   ]);
+
   const [gesRobotcheck, setgesRobotcheck] = useState("false");
 
   const [checkGesRoboter, setcheckGesRoboter] = useState("true");
@@ -146,51 +160,6 @@ function App() {
       }
     });
   }
-
-  /* Ethereum Data */
-
-  const [currentNetwork, setcurrentNetwork] = useState("Please Connect");
-  const [currentgasPrice, setcurrentgasPrice] = useState("Please Connect");
-  const [currentBlock, setcurrentBlock] = useState("Please Connect");
-
-  /* User Data */
-  const [MMStatus, setMMStatus] = useState("Please install MetaMask");
-  const [publicAdress, setpublicAdress] = useState("Please Connect");
-  const [currentBalance, setcurrentBalance] = useState("Please Connect");
-
-  useEffect(() => {
-    getEthereumData();
-    document.title = "Prototyp: 1.0";
-  }, []);
-  /*   Getter Ethereum Data   */
-  function getEthereumData() {
-    /* Connect Account */
-    function connectToMM() {
-      const promise = window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      promise.then(function (result) {});
-    }
-    /*   GET currentChain  */
-    function setcurrentchain() {
-      const promise = window.ethereum.request({ method: "eth_chainId" });
-      promise.then(function (result) {
-        setcurrentNetwork(result);
-      });
-    }
-    /*   GET Ropsten?  */
-
-    /*   GET gasPrice  */
-    function showGasPrice() {
-      const promise = window.ethereum.request({ method: "eth_gasPrice" });
-      promise.then(function (result) {
-        setcurrentgasPrice(parseInt(result, 16));
-      });
-    }
-    setcurrentchain();
-    showGasPrice();
-  }
-  /*   Getter User Data      */
   function getUserData() {
     /*   Is MetaMask installed ?  */
     function testMMinstall() {
@@ -250,19 +219,6 @@ function App() {
       }
     });
   }
-
-  function setallUserBalance(publicAdress) {
-    const promise = window.ethereum.request({
-      method: "eth_getBalance",
-      params: [publicAdress.toString(), "latest"],
-    });
-    promise.then(function (result) {
-      const IntBalance = parseInt(result, 16);
-      const ETHBalance = IntBalance * 1e-18;
-      return { ETHBalance };
-    });
-  }
-
   function fcheckArmLinks() {
     return userHolding.map((NFT) => {
       if (
@@ -289,6 +245,33 @@ function App() {
     if (checkArmLinks === "true" && checkArmRechts === "true") {
       return <div id="Mint_Button">Mint</div>;
     }
+  }
+  function getEthereumData() {
+    /* Connect Account */
+    function connectToMM() {
+      const promise = window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      promise.then(function (result) {});
+    }
+    /*   GET currentChain  */
+    function setcurrentchain() {
+      const promise = window.ethereum.request({ method: "eth_chainId" });
+      promise.then(function (result) {
+        setcurrentNetwork(result);
+      });
+    }
+    /*   GET Ropsten?  */
+
+    /*   GET gasPrice  */
+    function showGasPrice() {
+      const promise = window.ethereum.request({ method: "eth_gasPrice" });
+      promise.then(function (result) {
+        setcurrentgasPrice(parseInt(result, 16));
+      });
+    }
+    setcurrentchain();
+    showGasPrice();
   }
 
   return (
@@ -385,6 +368,7 @@ function App() {
           </div>
         </div>
       </div>
+      ;
     </div>
   );
 }
